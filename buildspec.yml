@@ -1,0 +1,19 @@
+version: 0.2
+
+phases:
+    install:
+        runtime-versions:
+            python: 3.12
+        commands:
+            - pip install --upgrade pip
+            # Install dependencies needed for running the static analysis
+            - pip install -r requirements.txt pylint
+            
+    pre_build:
+        commands:
+            - python --version
+            - pylint $CODEBUILD_SRC_DIR/*.py   --disable=R,C *.py **/*.py  --disable=E1101 *.py **/*.py  --disable=W0612 *.py **/*.py --disable=E0401,E0611,W0611 *.py **/*.py
+            - pylint $CODEBUILD_SRC_DIR/mysite/*.py   --disable=R,C *.py **/*.py  --disable=E1101 *.py **/*.py --disable=W0612 *.py **/*.py --disable=E0401,E0611,W0611 *.py **/*.py
+artifacts:
+    files:
+        - '**/*'

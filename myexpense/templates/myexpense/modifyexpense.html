@@ -1,0 +1,44 @@
+<!--load the expense modifying html page-->
+{% extends 'myexpense/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<div class="container my-5 pt-4 pt-xl-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-header bg-dark text-white">
+                    <h2 class="text-center my-2">Modify Expense</h2>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="type" class="form-label">Type</label>
+                            <input placeholder="Type" value="{{expense.type}}" type="text" name="type" id="type"
+                                   class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="fee" class="form-label">Fee</label>
+                            <input placeholder="Fee" value="{{expense.fee}}" type="text" name="fee" id="fee"
+                                   class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="payment_date" class="form-label">Payment Date</label>
+                            <input placeholder="Payment Date" value="{{expense.payment_date}}" type="text"
+                                   name="payment_date" id="payment_date" class="form-control">
+                        </div>
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-dark">Modify Expense</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+
+
+{% endblock %}

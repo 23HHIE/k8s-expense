@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: expense-pv
+  namespace: expense-pv
+spec:
+  capacity:
+    storage: 1Gi # PV的存储容量
+  accessModes:
+    - ReadWriteOnce # 同时只能被一个节点以读写方式挂载，适合单节点部署
+  hostPath:
+    path: /tmp/expense-data # 用本机目录模拟存储，Docker Desktop练习用，生产环境换成云存储
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: expense-pvc
+  namespace: k8s-expense
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi # PVC请求的存储容量，必须小于或等于PV的容量

@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: expense-ingress
+  namespace: k8s-expense
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: / # 给ingress-nginx的额外配置，这里告诉它把请求路径原样转发给后端服务
+spec:
+  ingressClassName: nginx # 指定使用哪个Ingress Controller，这里是nginx
+  rules:
+    - host: expense.local # 访问的域名，之后在 /etc/hosts里配置
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: expense-service # 对应的Service名字
+                port:
+                  number: 80 # Service暴露的端口，和Service里定义的一致

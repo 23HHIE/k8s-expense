@@ -1,0 +1,15 @@
+<!--load the page to show the user's profile-->
+{% extends 'myexpense/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<h1>
+    {{user.username}}
+    {{user.budget.amount}}
+    {{user.id}}
+</h1>
+
+
+
+
+{% endblock %}

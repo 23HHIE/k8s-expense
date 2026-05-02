@@ -1,0 +1,35 @@
+<!--load the landing html page-->
+{% extends 'myexpense/base.html' %}
+{% block content %}
+{% load static %}
+
+
+
+<div class=" container pt-4 pt-xl-5">
+    <div class="row pt-5">
+        <div class="col-md-6 col-xl-6 text-center text-md-start" style="margin-bottom: 20px;">
+            </br>
+            <div class="text-center" style="margin-bottom: 20px;">
+                <p class="fw-bold text-success mb-2">Welcome to WiseSpend</p>
+                <h1 class="fw-bold">Track every single euro effortlessly in your life</h1>
+            </div>
+            <div class="row justify-content-center" style="margin-bottom: 20px;">
+                <div class="col-md-4 col-xl-6 text-center">
+                    <a href="/users/register" class="btn btn-primary mt-4">Sign Up</a>
+                    <a href="/users/login" class="btn btn-info mt-4">Log In</a>
+                </div>
+            </div>
+            </br>
+        </div>
+
+        <div class="col-md-8 col-xl-6 text-center" style="margin-bottom: 20px;">
+            <div class="text-center position-relative">
+                <img class="img-fluid" src="{% static 'myexpense/images/landing.jpg' %}" alt="Landing Page" style="width: 800px;">
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock %}

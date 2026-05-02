@@ -1,0 +1,19 @@
+apiVersion: autoscaling/v2 # v2版本支持更多的指标类型, 如内存使用率等
+kind: HorizontalPodAutoscaler
+metadata:
+  name: expense-hpa
+  namespace: k8s-expense
+spec:
+  scaleTargetRef: # 指定要控制哪个Deployment
+    apiVersion: apps/v1
+    kind: Deployment
+    name: expense-deployment
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70 # 当CPU使用率超过70%时，自动扩容

@@ -1,0 +1,75 @@
+apiVersion: apps/v1 # 指定API版本
+kind: Deployment # 资源类型是Deployment
+metadata:
+  name: expense-deployment
+  namespace: k8s-expense # 指定命名空间
+  labels:
+    app: expense # 打标签，供Service找到它
+spec:
+  replicas: 1 # 运行一个Pod
+  strategy:
+    type: RollingUpdate # 滚动更新策略
+    rollingUpdate:
+      maxSurge: 1 # 在更新过程中最多允许增加一个Pod
+      maxUnavailable: 0 # 在更新过程中不允许有Pod不可用
+  selector:
+    matchLabels:
+      app: expense #Deloyment通过这个标签找到Pod
+  template: # Pod模板
+    metadata:
+      labels:
+        app: expense
+    spec:
+      containers:
+        - name: expense
+          image: expense-tracking:v1 # 使用本地构建的镜像docker build -t expense-tracking:v1 .
+          imagePullPolicy: Never # 不从远程仓库拉取镜像
+          ports:
+            - containerPort: 8000 # 容器暴露8000端口
+          env:
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: expense-secret
+                  key: SECRET_KEY # 从Secret中获取SECRET_KEY的值
+            - name: DEBUG
+              valueFrom:
+                configMapKeyRef:
+                  name: expense-config
+                  key: DEBUG
+            - name: ALLOWED_HOSTS
+              valueFrom:
+                configMapKeyRef:
+                  name: expense-config
+                  key: ALLOWED_HOSTS
+            - name: DJANGO_SETTINGS_MODULE
+              valueFrom:
+                configMapKeyRef:
+                  name: expense-config
+                  key: DJANGO_SETTINGS_MODULE
+          resources:
+            requests:
+              cpu: 100m # 请求100毫CPU
+              memory: 128Mi # 请求128Mi内存
+            limits:
+              cpu: 500m
+              memory: 256Mi
+          volumeMounts: # 将PVC挂载到容器内
+            - name: expense-storage
+              mountPath: /app/data # 挂载到容器内的/app/data目录
+          livenessProbe:
+            httpGet: # 向容器发送HTTP GET请求检查容器是否存活，返回200 或 300 就认为容器存活
+              path: /
+              port: 8000
+            initialDelaySeconds: 15 # 启动后等待15秒才开始进行存活检查
+            periodSeconds: 20 # 每20秒进行一次存活检查
+          readinessProbe: # 向容器发送HTTP GET请求检查容器是否准备好接受流量，返回200 或 300 就认为容器准备好
+            httpGet:
+              path: /
+              port: 8000
+            initialDelaySeconds: 5 # 启动后等待5秒才开始进行就绪检查
+            periodSeconds: 10 # 每10秒进行一次就绪检查
+      volumes: # 声明pod使用的卷
+        - name: expense-storage
+          persistentVolumeClaim:
+            claimName: expense-pvc

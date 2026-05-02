@@ -1,0 +1,24 @@
+version: 0.2
+env:
+  secrets-manager:
+    LOGIN: x22180966hh:sonartoken
+    HOST: x22180966hh:HOST
+    Organization: x22180966hh:Organization
+    Project: x22180966hh:Project
+    
+phases:
+  pre_build:
+    commands:
+      - wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
+      - unzip ./sonar-scanner-cli-5.0.1.3006-linux.zip
+      - export PATH=$PATH:$PWD/sonar-scanner-5.0.1.3006-linux/bin/
+      
+  build:
+    commands:
+      - sonar-scanner -X -Dsonar.login=$LOGIN -Dsonar.projectKey=$Project -Dsonar.host.url=$HOST -Dsonar.organization=$Organization
+      - curl https://sonarcloud.io/api/qualitygates/project_status?projectKey=$Project >result.json
+      - cat result.json
+      - if [ $(jq -r '.projectStatus.status' result.json) = ERROR ] ; then $CODEBUILD_BUILD_SUCCEEDING -eq 0 ;fi
+      
+    
+    

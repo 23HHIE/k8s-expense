@@ -1,0 +1,27 @@
+<!--load the user's profile page-->
+{% extends 'myexpense/base.html' %}
+{% block content %}
+<div class=" container pt-4 pt-xl-5">
+  
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Here's Your Profile</h5>
+            <!--the user's information card-->
+            <p class="card-text">
+                <strong>Username:</strong> <span id="username">{{user.username}}</span><br>
+                <strong>Email:</strong> <span id="email">{{user.email}}</span><br>
+                <strong>Budget: € </strong> <span id="budget">{{user.budget.amount}}</span>
+            <!--the form to modify the user's budget-->
+            <form id="updateBudgetForm" method="post" action="{% url 'myexpense:update_budget' user.id %}">
+                {% csrf_token %}
+                <label for="budgetAmount">Update Budget Amount: € </label>
+                <input type="text" id="budgetAmount" name="budgetAmount">
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+            </p>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

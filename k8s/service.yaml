@@ -1,0 +1,15 @@
+apiVersion: v1 # 指定API版本
+kind: Service # 资源类型是Service
+metadata:
+  name: expense-service # Service的名字
+  namespace: k8s-expense # 指定命名空间
+  labels:
+    app: expense # 打标签，供Service找到Pod
+spec:
+  selector:
+    app: expense # Service通过这个标签找到Pod
+  ports:
+    - protocol: TCP # 使用TCP协议
+      port: 80 # Service暴露的端口
+      targetPort: 8000 # 转发到Pod的8000端口
+  type: ClusterIP # Service类型是ClusterIP，集群内部可访问

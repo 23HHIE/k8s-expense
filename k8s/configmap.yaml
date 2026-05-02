@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: expense-config
+  namespace: k8s-expense
+data: # 存放非敏感的配置信息
+  DEBUG: "True" # 在开发环境开启，生产环境应该设置为False
+  ALLOWED_HOSTS: "expense.local,localhost,127.0.0.1" # 告诉django允许哪些主机访问应用
+  DJANGO_SETTINGS_MODULE: "mysite.settings" # 告诉Django用哪个settings模块来加载配置
