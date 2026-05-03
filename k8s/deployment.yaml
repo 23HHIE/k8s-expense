@@ -22,8 +22,10 @@ spec:
     spec:
       containers:
         - name: expense
-          image: expense-tracking:v1 # 使用本地构建的镜像docker build -t expense-tracking:v1 .
-          imagePullPolicy: Never # 不从远程仓库拉取镜像
+          # image: expense-tracking:v1 # 使用本地构建的镜像docker build -t expense-tracking:v1 .
+          image: luckyh/expense-tracking:latest # 使用远程仓库的镜像
+          # imagePullPolicy: Never # 不从远程仓库拉取镜像
+          imagePullPolicy: Always # 每次都从远程仓库拉取镜像，确保使用最新的镜像版本
           ports:
             - containerPort: 8000 # 容器暴露8000端口
           env:
